@@ -1,0 +1,43 @@
+services:
+  api:
+    build: ./api
+    ports:
+      - "8080:5000"
+    depends_on:
+      - db
+    deploy: 
+      resources: 
+        limits: 
+          cpus: '0.30' 
+          memory: 128M 
+
+
+
+  inference:
+    build: ./inference
+    ports:
+      - "8081:5001"
+    deploy: 
+      resources: 
+        limits: 
+          cpus: '0.50' 
+          memory: 512M 
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/vearr/lib/postgresql/data
+    ports: 
+      - "8082:5003"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} 
+    deploy: 
+      resources: 
+        limits: 
+          cpus: '0.20' 
+          memory: 128M 
+
+
+
+volumes:
+  postgres_data:
